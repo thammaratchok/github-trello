@@ -8,7 +8,8 @@ module GithubTrello
     post "/posthook" do
       config, http = self.class.config, self.class.http
 
-      payload = JSON.parse(params[:payload])
+      params = JSON.parse request.body.read
+      payload = params
 
       board_id = config["board_ids"][payload["repository"]["name"]]
       unless board_id
