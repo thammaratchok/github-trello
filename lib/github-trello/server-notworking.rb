@@ -17,7 +17,7 @@ module GithubTrello
         return
       end
 
-      #branch = payload["ref"].gsub("refs/heads/", "")
+      # branch = payload["ref"].gsub("refs/heads/", "")
       # if config["blacklist_branches"] and config["blacklist_branches"].include?(branch)
       #   return
       # elsif config["whitelist_branches"] and !config["whitelist_branches"].include?(branch)
@@ -25,7 +25,6 @@ module GithubTrello
       # end
 
       payload["pull_request"].each do |pr|
-        # Figure out the card short id
         match = pr["title"].match(/((case|card|close|archive|fix)e?s?\D?([0-9]+))/i)
         next unless match and match[3].to_i > 0
 
@@ -35,13 +34,26 @@ module GithubTrello
           next
         end
 
+        #payload["commits"].each do |commit|
+        # Figure out the card short id
+        # match = branch.match(/((case|card|close|archive|fix)e?s?\D?([0-9]+))/i)
+        # next unless match and match[3].to_i > 0
+        #
+        # results = http.get_card(board_id, match[3].to_i)
+        # unless results
+        #   puts "[ERROR] Cannot find card matching ID #{match[3]}"
+        #   next
+        # end
+
         results = JSON.parse(results)
 
         # Add the commit comment
         #message = "#{commit["author"]["name"]}: #{commit["message"]}\n\n[#{branch}] #{commit["url"]}"
         #message.gsub!(match[1], "")
         #message.gsub!(/\(\)$/, "")
-        message = "PR created"
+        #message = "new branch created"
+        message = "new pr created"
+
         http.add_comment(results["id"], message)
 
         # Determine the action to take
