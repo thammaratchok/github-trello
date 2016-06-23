@@ -26,7 +26,7 @@ module GithubTrello
        # ["commits"].each do |commit|
        ref = ["ref"]
         # Figure out the card short id
-        match = ref["ref"].match(/((case|card|close|archive|fix)e?s? \D?([0-9]+))/i)
+        match = ref["ref"].match(/((case|card|close|archive|fix)e?s?\D?([0-9]+))/i)
         next unless match and match[3].to_i > 0
 
         results = http.get_card(board_id, match[3].to_i)
