@@ -24,7 +24,7 @@ module GithubTrello
       end
 
        # ["commits"].each do |commit|
-       ref = ["ref"]
+        ref = ["ref"]
         # Figure out the card short id
         match = ref["ref"].match(/((case|card|close|archive|fix)e?s?\D?([0-9]+))/i)
         next unless match and match[3].to_i > 0
@@ -73,7 +73,7 @@ module GithubTrello
         unless to_update.empty?
           http.update_card(results["id"], to_update)
         end
-      end
+      #end
 
       ""
     end
