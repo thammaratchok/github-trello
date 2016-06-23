@@ -8,7 +8,8 @@ module GithubTrello
     post "/posthook" do
       config, http = self.class.config, self.class.http
 
-      payload = JSON.parse(params[:payload])
+      params = JSON.parse request.body.read
+      payload = params
 
       board_id = config["board_ids"][payload["repository"]["name"]]
       unless board_id
@@ -23,10 +24,9 @@ module GithubTrello
         return
       end
 
-       # ["commits"].each do |commit|
-        ref = ["ref"]
+      payload["commits"].each do |commit|
         # Figure out the card short id
-        match = ref["ref"].match(/((case|card|close|archive|fix)e?s?\D?([0-9]+))/i)
+        match = commit["message"].match(/((case|card|close|archive|fix)e?s? \D?([0-9]+))/i)
         next unless match and match[3].to_i > 0
 
         results = http.get_card(board_id, match[3].to_i)
@@ -38,10 +38,10 @@ module GithubTrello
         results = JSON.parse(results)
 
         # Add the commit comment
-        #message = "#{commit["author"]["name"]}: #{commit["message"]}\n\n[#{branch}] #{commit["url"]}"
-        #message.gsub!(match[1], "")
-        #message.gsub!(/\(\)$/, "")
-        message = "new branch created"
+        message = "#{commit["author"]["name"]}: #{commit["message"]}\n\n[#{branch}] #{commit["url"]}"
+        message.gsub!(match[1], "")
+        message.gsub!(/\(\)$/, "")
+
         http.add_comment(results["id"], message)
 
         # Determine the action to take
@@ -73,7 +73,7 @@ module GithubTrello
         unless to_update.empty?
           http.update_card(results["id"], to_update)
         end
-      #end
+      end
 
       ""
     end
