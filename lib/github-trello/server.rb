@@ -44,7 +44,8 @@ module GithubTrello
       if payload["action"] == "opened"
         message = "PR is opened"
       elsif payload["action"] == "closed"
-        base = payload["base"]["ref"]
+        #base = payload["base"]["ref"]
+        base = "master"
         message = "PR is merged in to [#{base}]"
       end
 
