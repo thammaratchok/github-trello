@@ -42,14 +42,14 @@ module GithubTrello
       #message.gsub!(match[1], "")
       #message.gsub!(/\(\)$/, "")
       id = payload["number"]
-      url = pr["url"]
+      url = pr["html_url"]
 
       if payload["action"] == "opened"
-        message = "#{url}:#{pr["title"]} is opened"
+        message = "#{url}: #{pr["title"]} is opened"
       elsif payload["action"] == "closed"
         base = pr["base"]["ref"]
         #base = "master"
-        message = "#{url}:#{pr["title"]} is merged into [#{base}]"
+        message = "#{url}: #{pr["title"]} is merged into [#{base}]"
       end
 
       http.add_comment(results["id"], message)
