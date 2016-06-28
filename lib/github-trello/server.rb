@@ -27,7 +27,7 @@ module GithubTrello
       pr = payload["pull_request"]
       # Figure out the card short id
       match = pr["title"].match(/((case|card|close|archive|fix)e?s?\D?([0-9]+))/i)
-      next unless and match and match[3].to_i > 0
+      next unless match and match[3].to_i > 0
 
       results = http.get_card(board_id, match[3].to_i)
       unless results
