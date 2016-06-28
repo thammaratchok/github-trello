@@ -45,11 +45,11 @@ module GithubTrello
       url = pr["html_url"]
 
       if payload["action"] == "opened"
-        message = "#{url}: #{pr["title"]} is opened"
+        message = "#{url} is opened"
       elsif payload["action"] == "closed"
         base = pr["base"]["ref"]
         #base = "master"
-        message = "#{url}: #{pr["title"]} is merged into [#{base}]"
+        message = "#{url} is now merged into [#{base}]"
       end
 
       http.add_comment(results["id"], message)
