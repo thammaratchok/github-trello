@@ -44,7 +44,8 @@ module GithubTrello
       if payload["action"] == "opened"
         message = "PR is opened"
       elsif payload["action"] == "closed"
-        message = "PR is merged"
+        base = payload["base"]["ref"]
+        message = "PR is merged in to [#{base}]"
       end
 
       http.add_comment(results["id"], message)
