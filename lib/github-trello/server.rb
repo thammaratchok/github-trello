@@ -41,9 +41,9 @@ module GithubTrello
       #message = "#{commit["author"]["name"]}: #{commit["message"]}\n\n[#{branch}] #{commit["url"]}"
       #message.gsub!(match[1], "")
       #message.gsub!(/\(\)$/, "")
-      if payload["action"] = "opened"
+      if payload["action"] == "opened"
         message = "PR is opened"
-      elsif payload["action"] = "closed"
+      elsif payload["action"] == "closed"
         message = "PR is merged"
       end
 
