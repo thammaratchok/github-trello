@@ -27,7 +27,7 @@ module GithubTrello
       pr = payload["pull_request"]
       # Figure out the card short id
       match = pr["title"].match(/((case|card|close|archive|fix)e?s?\D?([0-9]+))/i)
-      next unless pr["merged"] = false and match and match[3].to_i > 0
+      next unless and match and match[3].to_i > 0
 
       results = http.get_card(board_id, match[3].to_i)
       unless results
@@ -41,7 +41,11 @@ module GithubTrello
       #message = "#{commit["author"]["name"]}: #{commit["message"]}\n\n[#{branch}] #{commit["url"]}"
       #message.gsub!(match[1], "")
       #message.gsub!(/\(\)$/, "")
-      message = "PR is merged and closed"
+      if payload["action"] = "opened" and pr["merged"] = false
+        message = "PR is opened"
+      elsif payload["action"] = "closed" and pr["merged"] = true
+        message = "PR is merged"
+      end
 
       http.add_comment(results["id"], message)
 
